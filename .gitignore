@@ -1,0 +1,11 @@
+*.env
+*.log
+variables.env
+variables.env.now
+node_modules
+.idea
+.DS_store
+package-lock.json
+public/uploads/*
+public/dist/*
+!public/uploads/store.png
