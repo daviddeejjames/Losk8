@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
     type: Date
   },
   hearts: [
-    { type: mongoose.Schema.ObjectId, ref: 'Store' }
+    { type: mongoose.Schema.ObjectId, ref: 'Spot' }
   ]
 });
 

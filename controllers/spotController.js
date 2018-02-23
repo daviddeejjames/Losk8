@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Store = mongoose.model('Store'); // Already imported in app.js
+const Spot = mongoose.model('Spot'); // Already imported in app.js
 const User = mongoose.model('User');
 const multer = require('multer');
 const jimp = require('jimp');
@@ -17,9 +17,9 @@ const multerOptions = {
   }
 };
 
-exports.addStore = (req, res) => {
-  res.render('editStore', {
-    title: 'Add Store',
+exports.addSpot = (req, res) => {
+  res.render('editSpot', {
+    title: 'Add Spot',
   });
 };
 
@@ -44,93 +44,93 @@ exports.resize = async (req, res, next) => {
   next();
 };
 
-exports.createStore = async (req, res) => {
+exports.createSpot = async (req, res) => {
   req.body.author = req.user._id;
-  const store = await (new Store(req.body)).save();
-  req.flash('success', `Successfully created ${store.name}. Care to leave a review?`);
-  res.redirect(`/store/${store.slug}`);
+  const spot = await (new Spot(req.body)).save();
+  req.flash('success', `Successfully created ${spot.name}!`);
+  res.redirect(`/spot/${spot.slug}`);
 };
 
-exports.getStores = async (req, res) => {
+exports.getSpots = async (req, res) => {
   const page = req.params.page || 1;
   const limit = 6;
   const skip = (page * limit) - limit;
 
-  // 1. Query the database for list of all stores
-  const storesPromise = Store
+  // 1. Query the database for list of all spots
+  const spotsPromise = Spot
     .find()
     .skip(skip)
     .limit(limit)
     .sort({ created: 'desc' });
 
-  // 2. Count the stores for pagination
-  const countPromise = Store.count();
+  // 2. Count the spots for pagination
+  const countPromise = Spot.count();
 
-  const [stores, count] = await Promise.all([storesPromise, countPromise]);
+  const [spots, count] = await Promise.all([spotsPromise, countPromise]);
 
   const pages = Math.ceil(count / limit);
 
   // If page doesnt exist redirect to last page
-  if(!stores.length && skip) {
+  if(!spots.length && skip) {
     req.flash('info', `Sorry there is no page ${page}. So I brought you to page ${pages}`);
-    res.redirect(`/stores/page/${pages}`);
+    res.redirect(`/spots/page/${pages}`);
     return;
   }
 
-  res.render('stores', { title: 'Stores', stores, page, pages, count });
+  res.render('spots', { title: 'Spots', spots, page, pages, count });
 };
 
-const confirmOwner = (store, user) => {
-  if(!store.author.equals(user._id)){
-    throw Error('You must own a store in order to edit it!');
+const confirmOwner = (spot, user) => {
+  if(!spot.author.equals(user._id)){
+    throw Error('You must own a spot in order to edit it!');
   }
 };
 
-exports.editStore = async (req, res) => {
+exports.editSpot = async (req, res) => {
   // Set the location data to be a point by default
   // req.body.location.type = 'Point';
 
-  // 1. Find store given ID
-  const store = await Store.findOne({ _id: req.params.id });
+  // 1. Find spot given ID
+  const spot = await Spot.findOne({ _id: req.params.id });
 
-  // 2. Only allow edit if owner of store
-  confirmOwner(store, req.user);
+  // 2. Only allow edit if owner of spot
+  confirmOwner(spot, req.user);
 
-  // 3. Show edit form so the user can update the store
-  res.render('editStore', { title: `Edit ${store.name}`, store });
+  // 3. Show edit form so the user can update the spot
+  res.render('editSpot', { title: `Edit ${spot.name}`, spot });
 };
 
-exports.updateStore = async (req, res) => {
-  const store = await Store.findOneAndUpdate({ _id: req.params.id }, req.body, {
+exports.updateSpot = async (req, res) => {
+  const spot = await Spot.findOneAndUpdate({ _id: req.params.id }, req.body, {
     new: true, // return the updated data instead of old data
     runValidators: true
   }).exec();
-  req.flash('success', `Successfully updated <strong>${store.name}</strong>. <a href="/stores/${store.slug}">View Store -></a>`);
-  res.redirect(`/stores/${store._id}/edit`);
+  req.flash('success', `Successfully updated <strong>${spot.name}</strong>. <a href="/spots/${spot.slug}">View Spot -></a>`);
+  res.redirect(`/spots/${spot._id}/edit`);
 };
 
-exports.getStoreBySlug = async (req, res, next) => {
-  const store = await Store.findOne({slug: req.params.slug }).populate('author reviews');
+exports.getSpotBySlug = async (req, res, next) => {
+  const spot = await Spot.findOne({slug: req.params.slug }).populate('author reviews');
 
-  if(!store){
+  if(!spot){
     return next();
   }
 
-  res.render('singleStore', { title: `${store.name}`, store });
+  res.render('singleSpot', { title: `${spot.name}`, spot });
 };
 
-exports.getStoreByTag = async (req, res) => {
+exports.getSpotByTag = async (req, res) => {
   const tag =  req.params.tag;
   const tagQuery = tag || { $exists: true };
-  const tagsPromise = Store.getTagsList();
-  const storePromise = Store.find( {tags: tagQuery });
-  const [tags, stores] = await Promise.all([tagsPromise, storePromise]);
+  const tagsPromise = Spot.getTagsList();
+  const spotPromise = Spot.find( {tags: tagQuery });
+  const [tags, spots] = await Promise.all([tagsPromise, spotPromise]);
 
-  res.render('tags', {title: `${tag || 'Tags'}`, tags, tag, stores});
+  res.render('tags', {title: `${tag || 'Tags'}`, tags, tag, spots});
 };
 
-exports.searchStores = async (req, res) => {
-  const stores = await Store.find({
+exports.searchSpots = async (req, res) => {
+  const spots = await Spot.find({
     $text: {
       $search: req.query.q,
 
@@ -143,10 +143,10 @@ exports.searchStores = async (req, res) => {
     })
     .limit(5);
 
-  res.json(stores);
+  res.json(spots);
 };
 
-exports.mapStores = async (req, res) => {
+exports.mapSpots = async (req, res) => {
   const coordinates = [req.query.lng, req.query.lat].map(parseFloat);
   const q = {
     location: {
@@ -160,15 +160,15 @@ exports.mapStores = async (req, res) => {
     }
   };
 
-  const stores = await Store.find(q).select('slug name description location photo').limit(10);
-  res.json(stores);
+  const spots = await Spot.find(q).select('slug name description location photo').limit(10);
+  res.json(spots);
 };
 
 exports.mapPage = (req, res) => {
   res.render('map', { title: 'Map' });
 };
 
-exports.heartStore = async (req, res) => {
+exports.heartSpot = async (req, res) => {
   const hearts = req.user.hearts.map(obj => {
     obj.toString();
   });
@@ -182,13 +182,13 @@ exports.heartStore = async (req, res) => {
 };
 
 exports.getHearts = async (req, res) => {
-  const stores = await Store.find({
+  const spots = await Spot.find({
     _id: { $in: req.user.hearts }
   });
-  res.render('stores', { title: 'Hearted Stores', stores });
+  res.render('spots', { title: 'Hearted Spots', spots });
 };
 
-exports.getTopStores = async (req, res) => {
-  const stores = await Store.getTopStores();
-  res.render('topStores', { stores, title: 'Top Stores' });
+exports.getTopSpots = async (req, res) => {
+  const spots = await Spot.getTopSpots();
+  res.render('topSpots', { spots, title: 'Top Spots' });
 };

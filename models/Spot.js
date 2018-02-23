@@ -2,11 +2,11 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 const slug = require('slugs');
 
-const storeSchema = new mongoose.Schema({
+const spotSchema = new mongoose.Schema({
   name: {
     type: String,
     trim: true,
-    required: 'Please enter a store name!'
+    required: 'Please enter a spot name!'
   },
   slug: String,
   description: {
@@ -44,35 +44,35 @@ const storeSchema = new mongoose.Schema({
 });
 
 // Define our indexes
-storeSchema.index({
+spotSchema.index({
   name: 'text',
   description: 'text'
 });
 
-storeSchema.index({
+spotSchema.index({
   location: '2dsphere'
 });
 
-storeSchema.pre('save', async function(next){
+spotSchema.pre('save', async function(next){
   if(!this.isModified('name')){
     next(); // Skip it
     return; // Stop function here
   }
   this.slug = slug(this.name);
-  // Find stores that may already have the same slug
+  // Find spots that may already have the same slug
   const slugRegEx = new RegExp(`^(${this.slug})((-[0-9]*$)?)$`, 'i');
 
-  const storesWithSlug = await this.constructor.find({ slug: slugRegEx });
+  const spotsWithSlug = await this.constructor.find({ slug: slugRegEx });
 
-  if (storesWithSlug.length){
-    this.slug = `${this.slug}-${storesWithSlug.length + 1}`;
+  if (spotsWithSlug.length){
+    this.slug = `${this.slug}-${spotsWithSlug.length + 1}`;
   }
 
   next(); // Needed for save to occur
 });
 
-// Custom query to get all the store tags (and the num if them)
-storeSchema.statics.getTagsList = function() {
+// Custom query to get all the spot tags (and the num if them)
+spotSchema.statics.getTagsList = function() {
   return this.aggregate([
     { $unwind: '$tags' },
     { $group: { _id: '$tags', count: { $sum: 1 } } },
@@ -80,13 +80,13 @@ storeSchema.statics.getTagsList = function() {
   ]);
 };
 
-// Custom query to get Top Rated Stores
-storeSchema.statics.getTopStores = function () {
+// Custom query to get Top Rated Spots
+spotSchema.statics.getTopSpots = function () {
   return this.aggregate([
-    // Look stores and populate their reviews
+    // Lookup spots and populate their reviews
     { $lookup:
       { from: 'reviews', localField: '_id',
-        foreignField: 'store', as: 'reviews' }
+        foreignField: 'spot', as: 'reviews' }
     },
     // Filter for only items that have 2 or more reviews
     { $match: { 'reviews.1': { $exists: true } } },
@@ -101,10 +101,10 @@ storeSchema.statics.getTopStores = function () {
   ]);
 };
 
-storeSchema.virtual('reviews', {
+spotSchema.virtual('reviews', {
   ref: 'Review', // which model to link
-  localField: '_id', // which field on store
-  foreignField: 'store' // which field on review
+  localField: '_id', // which field on spot
+  foreignField: 'spot' // which field on review
 });
 
 function autopopulate(next) {
@@ -112,7 +112,7 @@ function autopopulate(next) {
   next();
 }
 
-storeSchema.pre('find', autopopulate);
-storeSchema.pre('findOne', autopopulate);
+spotSchema.pre('find', autopopulate);
+spotSchema.pre('findOne', autopopulate);
 
-module.exports = mongoose.model('Store', storeSchema);
+module.exports = mongoose.model('Spot', spotSchema);

@@ -1,6 +1,6 @@
 {
-  "name": "delisiciousness",
-  "version": "1.0.0",
+  "name": "losk8",
+  "version": "0.0.0-dev",
   "private": true,
   "engines": {
     "node": ">= 7.6.0"
