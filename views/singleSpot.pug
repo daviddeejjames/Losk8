@@ -1,0 +1,31 @@
+extends layout
+
+include mixins/_reviewForm
+include mixins/_review
+
+block content
+  .single
+    .single__hero
+      img.single__image(src=`/uploads/${spot.photo || 'spot.png'}` alt=`${spot.name}`)
+      h2.title.title--single
+        a(href=`/spots/${spot.slug}`) #{spot.name}
+
+    .single__details.inner
+      img.single__map(src=h.staticMap(spot.location.coordinates))
+      p.single__location #{spot.location.address}
+      p #{spot.description}
+
+      if spot.tags
+        ul.tags
+          each tag in spot.tags
+            li.tag
+              a.tag__link(href=`/tags/${tag}`)
+                span.tag__text # #{tag}
+
+      if user
+        +reviewForm(spot)
+
+      if spot.reviews
+        .reviews
+        each r in spot.reviews
+          +review(r)

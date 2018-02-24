@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  .inner
+    h2 Top #{spots.length} Spots
+    table.table
+      thead
+        td Photo
+        td Ranking
+        td Name
+        td Reviews
+        td Average Rating
+      each spot, i in spots
+        tr
+          td
+            a(href=`/spot/${spot.slug}`)
+              img(width=200 src=`/uploads/${spot.photo || 'spot.png'}` alt=spot.name)
+          td #{i + 1}
+          td: a(href=`/spot/${spot.slug}`)= spot.name
+          td= spot.reviews.length
+          td #{Math.round(spot.averageRating * 10) / 10 } / 5
