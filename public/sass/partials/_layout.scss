@@ -3,23 +3,24 @@ html {
 }
 
 body {
-  background: $purple;
   background:#efefef;
+
+  // Header border
   &:before {
     content: '';
     display: block;
-    background: $grad;
-    height: 10px;
+    background: $primary;
+    height: 4px;
     width: 100%;
   }
 }
 
 .inner,
 .content {
-  max-width: 900px;
-  margin: 0 auto;
+  max-width: $width;
+  margin: 20px auto;
 
-  @media all and (max-width: 900px) {
+  @media all and (max-width: $width) {
     padding: 2rem;
   }
 }

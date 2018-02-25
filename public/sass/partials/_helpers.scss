@@ -4,11 +4,20 @@
 }
 
 .button {
+  display: block;
+  max-width: 300px;
   border: 0;
-  background: $yellow;
-  color: $black;
-  font-family: 'Panama';
-  font-weight: 600;
+  border-radius: 20px;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  background: $primary;
+  color: $white;
+  font-family: $heading-font;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
 }
 
 .avatar {
