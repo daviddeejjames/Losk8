@@ -16,11 +16,11 @@ mixin spotForm(spot={})
     input(type="text" id="lng" name="location[coordinates][0]" value=(spot.location && spot.location.coordinates[0]))
     label(for="lat") Address Lat
     input(type="text" id="lat" name="location[coordinates][1]" value=(spot.location && spot.location.coordinates[1]))
-    - const choices = ['Wifi', 'Gluten Free', 'Open Late', 'Family Friendly', 'Vegetarian', 'Licensed']
+    - const choices = ['Ledge', 'Rail', 'Stairs', 'Bank', 'Manny Pad', 'Other']
     - const tags = spot.tags || [] // Need empty array for includes
     ul.tags
       each choice in choices
         .tag.tag__choice
           input(type="checkbox" id=choice value=choice name="tags" checked=(tags.includes(choice)))
           label(for=choice) #{choice}
-    input(type="submit" value="Save ▶️" class="button")
+    input(type="submit" value="Save" class="button")

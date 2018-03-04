@@ -155,7 +155,7 @@ exports.mapSpots = async (req, res) => {
           type: 'Point',
           coordinates
         },
-        $maxDistance: 10000 // 10 Km
+        $maxDistance: 200000 // 200 Km
       }
     }
   };

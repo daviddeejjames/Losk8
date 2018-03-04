@@ -2,11 +2,9 @@
 import axios from 'axios';
 import { $ } from './bling';
 
-// const defLat = -37.97;
-// const defLng = 144.49;
-
-const defLat = 43.2;
-const defLng = -79.8;
+// Flinders Street to start
+const defLat = -37.8181257;
+const defLng = 144.96494940000002;
 
 const mapOptions = {
   center: { lat: defLat, lng: defLng },
