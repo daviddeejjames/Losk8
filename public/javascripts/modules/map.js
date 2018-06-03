@@ -2,11 +2,9 @@
 import axios from 'axios';
 import { $ } from './bling';
 
-// const defLat = -37.97;
-// const defLng = 144.49;
-
-const defLat = 43.2;
-const defLng = -79.8;
+// Flinders Street to start
+const defLat = -37.8181257;
+const defLng = 144.96494940000002;
 
 const mapOptions = {
   center: { lat: defLat, lng: defLng },
@@ -14,7 +12,7 @@ const mapOptions = {
 };
 
 function loadPlaces(map, lat = defLat, lng = defLng) {
-  axios.get(`/api/stores/near?lat=${lat}&lng=${lng}`)
+  axios.get(`/api/spots/near?lat=${lat}&lng=${lng}`)
     .then(res => {
       const places = res.data;
       if(!places.length) {
@@ -38,8 +36,8 @@ function loadPlaces(map, lat = defLat, lng = defLng) {
       markers.forEach(marker => marker.addListener('click', function() {
         const html = `
           <div class="popup">
-            <a href="/store/${this.place.slug}">
-              <img src="/uploads/${this.place.photo || 'store.png'}"
+            <a href="/spot/${this.place.slug}">
+              <img src="/uploads/${this.place.photo || 'spot.png'}"
                 alt="${this.place.name}" />
               <p>${this.place.name} - ${this.place.location.address}</p>
             </a>

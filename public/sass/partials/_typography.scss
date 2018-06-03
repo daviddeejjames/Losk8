@@ -1,35 +1,30 @@
-@font-face {
-    font-family: 'panama';
-    src: url('/fonts/panama-bold-webfont.woff2') format('woff2'),
-         url('/fonts/panama-bold-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-
-}
-
+//
+// General typography for Losk8
+//
 html {
-  font-size:10px;
+  font-size: 10px;
 }
 
 body {
-  font-size:1.5rem;
-  color:$black;
+  font-family: $body-font;
+  font-size: $body-size;
+  line-height: $body-line-height;
+  color: $black;
 }
 
 h1, h2, h3, h4, h5, h6, {
   font-size: 5rem;
-  font-family: 'Panama';
+  font-family: $heading-font;
   font-weight: 600;
-  letter-spacing:-1px;
 }
 
 a {
   text-decoration: none;
-  color:$black;
+  color: $primary;
 }
 
 p a {
-  border-bottom: 2px solid $yellow;
+  border-bottom: 2px solid $primary;
 }
 
 p {
@@ -65,8 +60,8 @@ p {
   // inline link inside
   a {
     border-bottom: 0;
-    $yellowa: rgba($yellow,0.8);
-    background-image: linear-gradient(to right, $yellowa 100%, $yellowa 50%);
+    $primarya: rgba($primary,0.8);
+    background-image: linear-gradient(to right, $primarya 100%, $primarya 50%);
   }
 }
 

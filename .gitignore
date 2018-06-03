@@ -8,4 +8,4 @@ node_modules
 package-lock.json
 public/uploads/*
 public/dist/*
-!public/uploads/store.png
+!public/uploads/spot.png

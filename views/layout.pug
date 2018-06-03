@@ -3,7 +3,8 @@ html
   head
     title= `${title} | ${h.siteName}`
     link(rel='stylesheet', href='/dist/style.css')
-    link(rel="shortcut icon" type="image/png" href="/images/icons/doughnut.png")
+    link(rel="shortcut icon" type="image/png" href="/images/icons/favicon.png")
+    link(href="https://fonts.googleapis.com/css?family=Lato:300|Montserrat:400,600" rel="stylesheet")
     meta(name="viewport" content="width=device-width, initial-scale=1")
   body
     block header
@@ -11,8 +12,7 @@ html
         nav.nav
           .nav__section.nav__section--pages
             li.nav__item
-              a.nav__link.nav__link--logo(href="/")
-                != h.icon('logo')
+              a.nav__link.nav__link--logo(href="/") Losk8
             each item in h.menu
               li.nav__item
                 a.nav__link(href=item.slug, class=(currentPath.startsWith(item.slug) ? 'nav__link--active' : ''))
@@ -20,7 +20,7 @@ html
                   span #{item.title}
           .nav__section.nav__section--search
             .search
-              input.search__input(type="text" placeholder="Coffee, beer..." name="search")
+              input.search__input(type="text" placeholder="Ledge, Rail, Stairs ..." name="search")
               .search__results
           .nav__section.nav__section--user
             if user

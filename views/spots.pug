@@ -1,12 +1,12 @@
 extends layout
 
-include mixins/_storeCard
+include mixins/_spotCard
 include mixins/_pagination
 
 block content
   .inner
     h2 #{title}
-    .stores
-      each store in stores
-        +storeCard(store)
+    .spots
+      each spot in spots
+        +spotCard(spot)
     +pagination(page, pages, count)

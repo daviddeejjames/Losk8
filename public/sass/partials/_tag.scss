@@ -25,12 +25,12 @@
         padding: 1rem 1rem 1rem 4rem;
       }
       &:checked + label {
-        background: $yellow;
+        background: $primary;
       }
     }
   }
   &__link {
-    background:$yellow;
+    background:$primary;
     color:$black;
     display: flex;
     padding-left: 10px;
