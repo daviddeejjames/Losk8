@@ -12,7 +12,7 @@ mixin spotCard(spot={})
         if user && spot.author.equals(user._id)
           .spot__action.spot__action--edit
             a(href=`/spots/${spot._id}/edit`)
-            != h.icon('pencil')
+              != h.icon('pencil')
         if spot.reviews
           .spot__action.spot__action--count
             != h.icon('review')
