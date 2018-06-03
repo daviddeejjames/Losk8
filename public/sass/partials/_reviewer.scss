@@ -31,7 +31,7 @@
         &[for="star2"] { order: 2; }
         &[for="star1"] { order: 1; }
         &:hover, &:hover ~ label {
-          color: lighten($primary,20%);
+          color: lighten($yellow,20%);
         }
       }
     }
@@ -50,6 +50,11 @@
     border-top: 1px solid $grey;
     & > * {
       flex: 1;
+    }
+
+    .button {
+      margin-top: 0;
+      margin-right: 15px;
     }
   }
 }
